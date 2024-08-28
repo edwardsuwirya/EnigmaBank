@@ -10,7 +10,7 @@ internal class AccountConfig : IEntityTypeConfiguration<Account>
 {
     public void Configure(EntityTypeBuilder<Account> builder)
     {
-        builder.ToTable("Accounts", "enigma")
+        builder.ToTable("Accounts", "EnigmaBank")
             .HasIndex(a => a.AccountNumber)
             .IsUnique()
             .HasDatabaseName("IX_Accounts_AccountNumber");
@@ -24,7 +24,7 @@ internal class AccountHolderConfig : IEntityTypeConfiguration<AccountHolder>
 {
     public void Configure(EntityTypeBuilder<AccountHolder> builder)
     {
-        builder.ToTable("AccountHolders", "enigma");
+        builder.ToTable("AccountHolders", "EnigmaBank");
     }
 }
 
@@ -32,7 +32,7 @@ internal class TransactionConfig : IEntityTypeConfiguration<Transaction>
 {
     public void Configure(EntityTypeBuilder<Transaction> builder)
     {
-        builder.ToTable("Transactions", "enigma")
+        builder.ToTable("Transactions", "EnigmaBank")
             .Property(t => t.Type)
             .HasConversion(new EnumToStringConverter<TransactionType>());
     }
