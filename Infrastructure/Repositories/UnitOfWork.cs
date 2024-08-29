@@ -31,9 +31,9 @@ public class UnitOfWork<TId>(ApplicationDbContext context) : IUnitOfWork<TId>
     {
         _repositories ??= new Hashtable();
 
-        var type = typeof(T).Name;
+        var type = $"{typeof(T).Name}_write";
         if (_repositories.ContainsKey(type)) return (IWriteRepositoryAsync<T, TId>)_repositories[type];
-        var repositoryType = typeof(ReadRepositoryAsync<,>);
+        var repositoryType = typeof(WriteRepositoryAsync<,>);
         var repositoryInstance =
             Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T), typeof(TId)), context);
         _repositories.Add(type, repositoryInstance);
@@ -44,7 +44,7 @@ public class UnitOfWork<TId>(ApplicationDbContext context) : IUnitOfWork<TId>
     {
         _repositories ??= new Hashtable();
 
-        var type = typeof(T).Name;
+        var type = $"{typeof(T).Name}_read";
         if (_repositories.ContainsKey(type)) return (IReadRepositoryAsync<T, TId>)_repositories[type];
         var repositoryType = typeof(ReadRepositoryAsync<,>);
         var repositoryInstance =
