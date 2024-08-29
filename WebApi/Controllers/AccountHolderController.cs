@@ -54,5 +54,18 @@ namespace WebApi.Controllers
             if (response.IsSuccessful) return Ok(response);
             return NotFound(response);
         }
+
+        [HttpGet("allPaging")]
+        public async Task<IActionResult> GetAccountHoldersPaging([FromQuery(Name = "page")] int page = 1,
+            [FromQuery(Name = "size")] int size = 10
+        )
+        {
+            var response = await Sender.Send(new GetAccountHoldersPagingQuery
+            {
+                page = page, size = size
+            });
+            if (response.IsSuccessful) return Ok(response);
+            return NotFound(response);
+        }
     }
 }
