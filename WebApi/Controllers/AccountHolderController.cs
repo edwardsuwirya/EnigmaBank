@@ -33,7 +33,7 @@ namespace WebApi.Controllers
             return GenerateResponse(response);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteAccountHolder(int id)
         {
             var response = await Sender.Send(new DeleteAccountHolderCommand
@@ -41,7 +41,7 @@ namespace WebApi.Controllers
             return GenerateResponse(response);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetAccountHolderById(int id)
         {
             var response = await Sender.Send(new GetAccountHolderByIdQuery
