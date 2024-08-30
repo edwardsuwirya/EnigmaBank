@@ -1,6 +1,8 @@
 using Common.Wrapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {

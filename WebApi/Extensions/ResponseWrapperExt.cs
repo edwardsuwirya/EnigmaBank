@@ -1,8 +1,9 @@
 using Common.Enums;
 using Common.Exceptions;
+using Common.Wrapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Common.Wrapper;
+namespace WebApi.Extensions;
 
 public static class ResponseWrapperExt
 {
@@ -23,6 +24,7 @@ public static class ResponseWrapperExt
             ErrorType.Required => new BadRequestException(message),
             ErrorType.NotInRange => new BadRequestException(message),
             ErrorType.NotComplex => new BadRequestException(message),
+            ErrorType.Validations => new BadRequestException(message),
             _ => new GeneralException(message)
         };
     }

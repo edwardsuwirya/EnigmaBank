@@ -7,5 +7,6 @@ public enum ErrorType : byte
     General,
     Required,
     NotInRange,
-    NotComplex
+    NotComplex,
+    Validations,
 }
