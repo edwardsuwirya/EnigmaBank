@@ -1,4 +1,5 @@
 using Application.Repositories;
+using Common.Exceptions;
 using Common.Wrapper;
 using Domain;
 using MediatR;
@@ -18,7 +19,8 @@ public class DeleteAccountHolderCommandHandler(IUnitOfWork<int> unitOfWork)
     {
         var accountHolderInDb =
             await unitOfWork.ReadRepositoryFor<AccountHolder>().GetByIdAsync(request.Id);
-        if (accountHolderInDb is null) return new ResponseWrapper<int>().Fail("Account Holder not found");
+        if (accountHolderInDb is null)
+            return new ResponseWrapper<int>().Fail(AppError.NotFound(request.Id));
         await unitOfWork.WriteRepositoryFor<AccountHolder>().DeleteAsync(accountHolderInDb);
         await unitOfWork.CommitAsync(cancellationToken);
         return new ResponseWrapper<int>().Success(accountHolderInDb.Id, "Account Holder deleted");

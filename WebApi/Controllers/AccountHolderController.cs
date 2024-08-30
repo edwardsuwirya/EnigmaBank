@@ -1,6 +1,8 @@
 using Application.Features.AccountHolders.Commands;
 using Application.Features.AccountHolders.Queries;
+using Common.Exceptions;
 using Common.Requests;
+using Common.Wrapper;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -16,8 +18,7 @@ namespace WebApi.Controllers
         {
             var response = await Sender.Send(new CreateAccountHolderCommand
                 { CreateAccountHolder = createAccountHolder });
-            if (response.IsSuccessful) return Ok(response);
-            return BadRequest(response);
+            return GenerateResponse(response);
         }
 
         [HttpPut("update")]
@@ -25,8 +26,7 @@ namespace WebApi.Controllers
         {
             var response = await Sender.Send(new UpdateAccountHolderCommand
                 { UpdateAccountHolder = updateAccountHolder });
-            if (response.IsSuccessful) return Ok(response);
-            return BadRequest(response);
+            return GenerateResponse(response);
         }
 
         [HttpDelete("{id}")]
@@ -34,8 +34,7 @@ namespace WebApi.Controllers
         {
             var response = await Sender.Send(new DeleteAccountHolderCommand
                 { Id = id });
-            if (response.IsSuccessful) return Ok(response);
-            return BadRequest(response);
+            return GenerateResponse(response);
         }
 
         [HttpGet("{id}")]
@@ -43,16 +42,14 @@ namespace WebApi.Controllers
         {
             var response = await Sender.Send(new GetAccountHolderByIdQuery
                 { Id = id });
-            if (response.IsSuccessful) return Ok(response);
-            return NotFound(response);
+            return GenerateResponse(response);
         }
 
         [HttpGet("all")]
         public async Task<IActionResult> GetAccountHolders()
         {
             var response = await Sender.Send(new GetAccountHoldersQuery());
-            if (response.IsSuccessful) return Ok(response);
-            return NotFound(response);
+            return GenerateResponse(response);
         }
 
         [HttpGet("allPaging")]
@@ -64,8 +61,7 @@ namespace WebApi.Controllers
             {
                 page = page, size = size
             });
-            if (response.IsSuccessful) return Ok(response);
-            return NotFound(response);
+            return GenerateResponse(response);
         }
     }
 }

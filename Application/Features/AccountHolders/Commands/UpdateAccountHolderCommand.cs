@@ -1,4 +1,5 @@
 using Application.Repositories;
+using Common.Exceptions;
 using Common.Requests;
 using Common.Wrapper;
 using Domain;
@@ -20,7 +21,9 @@ public class UpdateAccountHolderCommandHandler(IUnitOfWork<int> unitOfWork)
     {
         var accountHolderInDb =
             await unitOfWork.ReadRepositoryFor<AccountHolder>().GetByIdAsync(request.UpdateAccountHolder.Id);
-        if (accountHolderInDb is null) return new ResponseWrapper<int>().Fail("Account Holder not found");
+        if (accountHolderInDb is null)
+            return new ResponseWrapper<int>().Fail(AppError.NotFound(
+                request.UpdateAccountHolder.Id));
         var updatedAccountHolder = accountHolderInDb.Update(
             request.UpdateAccountHolder.FirstName,
             request.UpdateAccountHolder.LastName,

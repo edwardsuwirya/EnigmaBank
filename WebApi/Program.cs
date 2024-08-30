@@ -1,5 +1,7 @@
 using Application;
+using Common.Exceptions;
 using Infrastructure;
+using WebApi.Exceptions.Handlers;
 
 namespace WebApi;
 
@@ -20,6 +22,10 @@ public class Program
         builder.Services.AddRepositories();
         builder.Services.AddApplicationServices();
 
+        builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddProblemDetails();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -33,7 +39,7 @@ public class Program
 
         app.UseAuthorization();
 
-
+        app.UseExceptionHandler();
         app.MapControllers();
 
         app.Run();

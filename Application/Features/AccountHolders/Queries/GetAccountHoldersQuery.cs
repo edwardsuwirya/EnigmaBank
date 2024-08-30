@@ -1,4 +1,5 @@
 using Application.Repositories;
+using Common.Exceptions;
 using Common.Responses;
 using Common.Wrapper;
 using Domain;
@@ -21,7 +22,7 @@ public class GetAccountHoldersQueryHandler(IUnitOfWork<int> unitOfWork) : IReque
         var accountHoldersInDb = await unitOfWork.ReadRepositoryFor<AccountHolder>().GetAllAsync();
 
         if (accountHoldersInDb.Count == 0)
-            return new ResponseWrapper<List<AccountHolderResponse>>().Fail("No account holders found");
+            return new ResponseWrapper<List<AccountHolderResponse>>().Fail(AppError.EmptyList());
         return new ResponseWrapper<List<AccountHolderResponse>>()
             .Success(accountHoldersInDb.Adapt<List<AccountHolderResponse>>());
     }

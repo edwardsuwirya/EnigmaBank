@@ -1,4 +1,5 @@
 using Application.Repositories;
+using Common.Exceptions;
 using Common.Responses;
 using Common.Wrapper;
 using Domain;
@@ -24,8 +25,8 @@ public class GetAccountHoldersQueryPagingHandler(IUnitOfWork<int> unitOfWork)
             .GetAllPagingAsync(request.page, request.size);
 
         if (accountHoldersInDb.Items.Count == 0)
-            return new ResponseWrapper<List<AccountHolderResponse>>().Fail("No account holders found");
-        
+            return new ResponseWrapper<List<AccountHolderResponse>>().Fail(AppError.EmptyList());
+
         return new PagingResponseWrapper<List<AccountHolderResponse>>().Success(
             accountHoldersInDb.Adapt<PageWrapper<List<AccountHolderResponse>>>());
     }

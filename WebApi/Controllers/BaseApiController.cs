@@ -1,5 +1,5 @@
+using Common.Wrapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -9,6 +9,12 @@ namespace WebApi.Controllers
     {
         private ISender _sender;
 
-        public ISender Sender => _sender ??= HttpContext.RequestServices.GetService<ISender>();
+        protected ISender Sender => _sender ??= HttpContext.RequestServices.GetService<ISender>();
+
+        protected IActionResult GenerateResponse<T>(ResponseWrapper<T> response)
+        {
+            return response.Match(onSuccess: () => Ok(response),
+                onFailure: response.Error);
+        }
     }
 }
