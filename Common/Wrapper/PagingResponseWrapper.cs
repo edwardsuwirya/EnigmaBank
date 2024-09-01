@@ -14,7 +14,7 @@ public class PagingResponseWrapper<T> : ResponseWrapper<T>
         PageCount = data.TotalPages;
         TotalItem = data.TotalItems;
         IsSuccessful = true;
-        Messages = [message];
+        Message = message;
         Data = data.Items;
         return this;
     }

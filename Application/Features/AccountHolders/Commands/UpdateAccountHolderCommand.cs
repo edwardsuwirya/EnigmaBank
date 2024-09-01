@@ -22,8 +22,8 @@ public class UpdateAccountHolderCommandHandler(IUnitOfWork<int> unitOfWork)
         var accountHolderInDb =
             await unitOfWork.ReadRepositoryFor<AccountHolder>().GetByIdAsync(request.UpdateAccountHolder.Id);
         if (accountHolderInDb is null)
-            return new ResponseWrapper<int>().Fail(AppError.NotFound(
-                request.UpdateAccountHolder.Id));
+            return new ResponseWrapper<int>().Fail(ExistenceErrors.NotFound(
+                request.UpdateAccountHolder.Id.ToString()));
         var updatedAccountHolder = accountHolderInDb.Update(
             request.UpdateAccountHolder.FirstName,
             request.UpdateAccountHolder.LastName,

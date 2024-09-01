@@ -1,8 +1,9 @@
+using Common.Enums;
+using Common.Exceptions;
 using Common.Wrapper;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Extensions;
+using Newtonsoft.Json;
 
 namespace WebApi.Controllers
 {
@@ -13,10 +14,9 @@ namespace WebApi.Controllers
 
         protected ISender Sender => _sender ??= HttpContext.RequestServices.GetService<ISender>();
 
-        protected IActionResult GenerateResponse<T>(ResponseWrapper<T> response)
+        protected IActionResult Handle<T>(ResponseWrapper<T> response)
         {
-            return response.Match(onSuccess: () => Ok(response),
-                onFailure: response.Error);
+            return response.IsSuccessful ? Ok(response) : StatusCode(response.InternalError.StatusCode, response);
         }
     }
 }

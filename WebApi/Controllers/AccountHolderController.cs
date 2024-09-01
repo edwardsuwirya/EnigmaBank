@@ -1,16 +1,7 @@
 using Application.Features.AccountHolders.Commands;
 using Application.Features.AccountHolders.Queries;
-using Common.Enums;
-using Common.Exceptions;
 using Common.Requests;
-using Common.Responses;
-using Common.Wrapper;
-using Domain;
-using FluentValidation;
-using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
@@ -22,7 +13,7 @@ namespace WebApi.Controllers
         {
             var response = await Sender.Send(new CreateAccountHolderCommand
                 { CreateAccountHolder = createAccountHolder });
-            return GenerateResponse(response);
+            return Handle(response);
         }
 
         [HttpPut("update")]
@@ -30,7 +21,7 @@ namespace WebApi.Controllers
         {
             var response = await Sender.Send(new UpdateAccountHolderCommand
                 { UpdateAccountHolder = updateAccountHolder });
-            return GenerateResponse(response);
+            return Handle(response);
         }
 
         [HttpDelete("{id:int}")]
@@ -38,7 +29,7 @@ namespace WebApi.Controllers
         {
             var response = await Sender.Send(new DeleteAccountHolderCommand
                 { Id = id });
-            return GenerateResponse(response);
+            return Handle(response);
         }
 
         [HttpGet("{id:int}")]
@@ -46,14 +37,14 @@ namespace WebApi.Controllers
         {
             var response = await Sender.Send(new GetAccountHolderByIdQuery
                 { Id = id });
-            return GenerateResponse(response);
+            return Handle(response);
         }
 
         [HttpGet("all")]
         public async Task<IActionResult> GetAccountHolders()
         {
             var response = await Sender.Send(new GetAccountHoldersQuery());
-            return GenerateResponse(response);
+            return Handle(response);
         }
 
         [HttpGet("allPaging")]
@@ -65,7 +56,7 @@ namespace WebApi.Controllers
             {
                 page = page, size = size
             });
-            return GenerateResponse(response);
+            return Handle(response);
         }
     }
 }

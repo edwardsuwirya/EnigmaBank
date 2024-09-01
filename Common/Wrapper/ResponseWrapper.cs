@@ -7,24 +7,26 @@ public class ResponseWrapper<T>
 {
     public bool IsSuccessful { get; set; }
 
-    public List<string> Messages { get; set; }
+    public string Message { get; set; }
 
-    public AppError Error { get; set; }
+    public InternalError InternalError { get; set; }
     public T Data { get; set; }
 
-    public ResponseWrapper<T> Success(T data, string message = null)
+    public ResponseWrapper<T> Success(T data, string message = "Success")
     {
         IsSuccessful = true;
-        Messages = [message];
+        Message = message;
+        InternalError = default;
         Data = data;
 
         return this;
     }
 
-    public ResponseWrapper<T> Fail(AppError error)
+    public ResponseWrapper<T> Fail(InternalError internalError)
     {
         IsSuccessful = false;
-        Error = error;
+        InternalError = internalError;
+        Data = default;
         return this;
     }
 }

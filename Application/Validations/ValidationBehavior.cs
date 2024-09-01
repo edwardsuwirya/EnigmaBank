@@ -23,7 +23,7 @@ public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TReq
 
         if (errors.Count != 0)
         {
-            var appError = AppError.Validations(string.Join("-", errors));
+            var appError = ValidationErrors.General(string.Join("-", errors));
 
             return (TResponse)Activator.CreateInstance(typeof(TResponse),
                 appError);

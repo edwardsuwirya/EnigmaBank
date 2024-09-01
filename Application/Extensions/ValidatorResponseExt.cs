@@ -9,8 +9,8 @@ public static class ValidatorResponseExt
 {
     public static ResponseWrapper<T> ValidationResponse<T>(this ValidationResult validationResult)
     {
-        if (validationResult.IsValid) return null;
-        var appError = AppError.Validations(validationResult.ToString("~"));
-        return new ResponseWrapper<T>().Fail(appError);
+        return validationResult.IsValid
+            ? null
+            : new ResponseWrapper<T>().Fail(ValidationErrors.General(validationResult.ToString("~")));
     }
 }
