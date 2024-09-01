@@ -18,9 +18,6 @@ public class GetAccountsQueryHandler(IUnitOfWork<int> unitOfWork) : IRequestHand
     {
         var accountsInDb = await unitOfWork.ReadRepositoryFor<Account>().GetAllAsync();
 
-        if (accountsInDb.Count == 0)
-            return new ResponseWrapper<List<AccountResponse>>().Fail(ExistenceErrors.EmptyList);
-        return new ResponseWrapper<List<AccountResponse>>()
-            .Success(accountsInDb.Adapt<List<AccountResponse>>());
+        return accountsInDb.Count == 0 ? new ResponseWrapper<List<AccountResponse>>(ExistenceErrors.EmptyList) : new ResponseWrapper<List<AccountResponse>>(accountsInDb.Adapt<List<AccountResponse>>());
     }
 }

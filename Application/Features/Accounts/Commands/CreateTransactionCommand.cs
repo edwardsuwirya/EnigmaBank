@@ -26,7 +26,7 @@ public class CreateTransactionCommandHandler(IUnitOfWork<int> unitOfWork)
     {
         var accountInDb = await unitOfWork.ReadRepositoryFor<Account>().GetByIdAsync(request.Transaction.AccountId);
         if (accountInDb == null)
-            return new ResponseWrapper<int>().Fail(ExistenceErrors.NotFound(request.Transaction.AccountId.ToString()));
+            return new ResponseWrapper<int>(ExistenceErrors.NotFound(request.Transaction.AccountId.ToString()));
 
         switch (request.Transaction.Type)
         {
@@ -42,11 +42,11 @@ public class CreateTransactionCommandHandler(IUnitOfWork<int> unitOfWork)
                 await unitOfWork.WriteRepositoryFor<Transaction>().AddAsync(transactionDeposit);
                 await unitOfWork.WriteRepositoryFor<Account>().UpdateAsync(accountInDb);
                 await unitOfWork.CommitAsync(cancellationToken);
-                return new ResponseWrapper<int>().Success(data: transactionDeposit.Id,
+                return new ResponseWrapper<int>(data: transactionDeposit.Id,
                     "Deposit is successfully created.");
             case TransactionType.Withdrawal:
                 if (request.Transaction.Amount > accountInDb.Balance)
-                    return new ResponseWrapper<int>().Fail(BusinessErrors.InsufficientBalance);
+                    return new ResponseWrapper<int>(BusinessErrors.InsufficientBalance);
 
                 var transactionWithdrawal = new Transaction
                 {
@@ -59,10 +59,10 @@ public class CreateTransactionCommandHandler(IUnitOfWork<int> unitOfWork)
                 await unitOfWork.WriteRepositoryFor<Transaction>().AddAsync(transactionWithdrawal);
                 await unitOfWork.WriteRepositoryFor<Account>().UpdateAsync(accountInDb);
                 await unitOfWork.CommitAsync(cancellationToken);
-                return new ResponseWrapper<int>().Success(data: transactionWithdrawal.Id,
+                return new ResponseWrapper<int>(data: transactionWithdrawal.Id,
                     "Withdrawal is successfully created.");
             default:
-                return new ResponseWrapper<int>().Fail(GeneralErrors.General("Transaction Type is invalid"));
+                return new ResponseWrapper<int>(GeneralErrors.General("Transaction Type is invalid"));
         }
     }
 }

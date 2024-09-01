@@ -12,21 +12,22 @@ public class ResponseWrapper<T>
     public InternalError InternalError { get; set; }
     public T Data { get; set; }
 
-    public ResponseWrapper<T> Success(T data, string message = "Success")
+    public ResponseWrapper()
+    {
+    }
+
+    public ResponseWrapper(T data, string message = "Success")
     {
         IsSuccessful = true;
         Message = message;
         InternalError = default;
         Data = data;
-
-        return this;
     }
 
-    public ResponseWrapper<T> Fail(InternalError internalError)
+    public ResponseWrapper(InternalError internalError)
     {
         IsSuccessful = false;
         InternalError = internalError;
         Data = default;
-        return this;
     }
 }

@@ -22,7 +22,7 @@ public class UpdateAccountHolderCommandHandler(IUnitOfWork<int> unitOfWork)
         var accountHolderInDb =
             await unitOfWork.ReadRepositoryFor<AccountHolder>().GetByIdAsync(request.UpdateAccountHolder.Id);
         if (accountHolderInDb is null)
-            return new ResponseWrapper<int>().Fail(ExistenceErrors.NotFound(
+            return new ResponseWrapper<int>(ExistenceErrors.NotFound(
                 request.UpdateAccountHolder.Id.ToString()));
         var updatedAccountHolder = accountHolderInDb.Update(
             request.UpdateAccountHolder.FirstName,
@@ -32,6 +32,6 @@ public class UpdateAccountHolderCommandHandler(IUnitOfWork<int> unitOfWork)
 
         await unitOfWork.WriteRepositoryFor<AccountHolder>().UpdateAsync(updatedAccountHolder);
         await unitOfWork.CommitAsync(cancellationToken);
-        return new ResponseWrapper<int>().Success(updatedAccountHolder.Id, "Account Holder updated");
+        return new ResponseWrapper<int>(updatedAccountHolder.Id, "Account Holder updated");
     }
 }

@@ -22,8 +22,7 @@ public class GetAccountHoldersQueryHandler(IUnitOfWork<int> unitOfWork) : IReque
         var accountHoldersInDb = await unitOfWork.ReadRepositoryFor<AccountHolder>().GetAllAsync();
 
         if (accountHoldersInDb.Count == 0)
-            return new ResponseWrapper<List<AccountHolderResponse>>().Fail(ExistenceErrors.EmptyList);
-        return new ResponseWrapper<List<AccountHolderResponse>>()
-            .Success(accountHoldersInDb.Adapt<List<AccountHolderResponse>>());
+            return new ResponseWrapper<List<AccountHolderResponse>>(ExistenceErrors.EmptyList);
+        return new ResponseWrapper<List<AccountHolderResponse>>(accountHoldersInDb.Adapt<List<AccountHolderResponse>>());
     }
 }

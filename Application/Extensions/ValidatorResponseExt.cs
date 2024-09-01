@@ -11,6 +11,6 @@ public static class ValidatorResponseExt
     {
         return validationResult.IsValid
             ? null
-            : new ResponseWrapper<T>().Fail(ValidationErrors.General(validationResult.ToString("~")));
+            : new ResponseWrapper<T>(ValidationErrors.General(validationResult.ToString("~")));
     }
 }

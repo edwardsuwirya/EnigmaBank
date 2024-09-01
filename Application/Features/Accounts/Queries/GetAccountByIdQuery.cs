@@ -22,8 +22,8 @@ public class GetAccountByIdQueryHandler(IUnitOfWork<int> unitOfWork) : IRequestH
         var accountInDb =
             await unitOfWork.ReadRepositoryFor<Account>().GetByIdAsync(request.Id, c => c.AccountHolder);
         if (accountInDb is null)
-            return new ResponseWrapper<AccountResponse>().Fail(ExistenceErrors.NotFound(request.Id.ToString()));
-        return new ResponseWrapper<AccountResponse>().Success(
+            return new ResponseWrapper<AccountResponse>(ExistenceErrors.NotFound(request.Id.ToString()));
+        return new ResponseWrapper<AccountResponse>(
             accountInDb.Adapt<AccountResponse>());
     }
 }
