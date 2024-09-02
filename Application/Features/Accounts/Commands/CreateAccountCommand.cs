@@ -24,6 +24,6 @@ public class CreateAccountCommandHandler(IUnitOfWork<int> unitOfWork)
 
         await unitOfWork.WriteRepositoryFor<Account>().AddAsync(account);
         await unitOfWork.CommitAsync(cancellationToken);
-        return new ResponseWrapper<int>(account.Id, "Account created");
+        return ResponseWrapper<int>.Success(account.Id, "Account created");
     }
 }

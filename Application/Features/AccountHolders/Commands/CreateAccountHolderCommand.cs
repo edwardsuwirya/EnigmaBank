@@ -1,12 +1,7 @@
-using Application.Extensions;
 using Application.Repositories;
-using Common.Enums;
-using Common.Exceptions;
 using Common.Requests;
-using Common.Responses;
 using Common.Wrapper;
 using Domain;
-using FluentValidation;
 using Mapster;
 using MediatR;
 
@@ -27,6 +22,6 @@ public class CreateAccountHolderCommandHandler(
         var accountHolder = request.CreateAccountHolder.Adapt<AccountHolder>();
         await unitOfWork.WriteRepositoryFor<AccountHolder>().AddAsync(accountHolder);
         await unitOfWork.CommitAsync(cancellationToken);
-        return new ResponseWrapper<int>(accountHolder.Id, "Account Holder created");
+        return ResponseWrapper<int>.Success(accountHolder.Id, "Account Holder created");
     }
 }

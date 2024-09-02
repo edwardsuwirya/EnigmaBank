@@ -24,6 +24,8 @@ public class GetAccountTransactionQueryHandler(IUnitOfWork<int> unitOfWork)
             .ReadRepositoryFor<Transaction>()
             .FilterByAsync(trx => trx.AccountId == request.AccountId);
 
-        return transactionsInDb.Count == 0 ? new ResponseWrapper<List<TransactionResponse>>(ExistenceErrors.EmptyList) : new ResponseWrapper<List<TransactionResponse>>(transactionsInDb.Adapt<List<TransactionResponse>>());
+        return transactionsInDb.Count == 0
+            ? ResponseWrapper<List<TransactionResponse>>.Fail(ExistenceErrors.EmptyList)
+            : ResponseWrapper<List<TransactionResponse>>.Success(transactionsInDb.Adapt<List<TransactionResponse>>());
     }
 }

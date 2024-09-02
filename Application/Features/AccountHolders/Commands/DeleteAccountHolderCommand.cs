@@ -20,10 +20,10 @@ public class DeleteAccountHolderCommandHandler(IUnitOfWork<int> unitOfWork)
         var accountHolderInDb =
             await unitOfWork.ReadRepositoryFor<AccountHolder>().GetByIdAsync(request.Id);
         if (accountHolderInDb is null)
-            return new ResponseWrapper<int>(
+            return ResponseWrapper<int>.Fail(
                 ExistenceErrors.NotFound("Data was not found " + request.Id));
         await unitOfWork.WriteRepositoryFor<AccountHolder>().DeleteAsync(accountHolderInDb);
         await unitOfWork.CommitAsync(cancellationToken);
-        return new ResponseWrapper<int>(accountHolderInDb.Id, "Account Holder deleted");
+        return ResponseWrapper<int>.Success(accountHolderInDb.Id, "Account Holder deleted");
     }
 }

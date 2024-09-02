@@ -25,9 +25,9 @@ public class GetAccountHoldersQueryPagingHandler(IUnitOfWork<int> unitOfWork)
             .GetAllPagingAsync(request.page, request.size);
 
         if (accountHoldersInDb.Items.Count == 0)
-            return new ResponseWrapper<List<AccountHolderResponse>>(ExistenceErrors.EmptyList);
+            return ResponseWrapper<List<AccountHolderResponse>>.Fail(ExistenceErrors.EmptyList);
 
-        return new PagingResponseWrapper<List<AccountHolderResponse>>().Success(
+        return PagingResponseWrapper<List<AccountHolderResponse>>.Success(
             accountHoldersInDb.Adapt<PageWrapper<List<AccountHolderResponse>>>());
     }
 }

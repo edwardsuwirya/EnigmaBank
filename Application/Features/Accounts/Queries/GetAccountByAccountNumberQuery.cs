@@ -27,9 +27,9 @@ public class GetAccountByAccountNumberQueryHandler(IUnitOfWork<int> unitOfWork)
 
         if (accountInDb is null)
             return await Task.FromResult(
-                new ResponseWrapper<AccountResponse>(ExistenceErrors.NotFound(request.AccountNumber)));
+                ResponseWrapper<AccountResponse>.Fail(ExistenceErrors.NotFound(request.AccountNumber)));
 
-        return await Task.FromResult(new ResponseWrapper<AccountResponse>(
+        return await Task.FromResult(ResponseWrapper<AccountResponse>.Success(
             accountInDb.Adapt<AccountResponse>()));
     }
 }

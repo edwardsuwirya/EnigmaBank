@@ -1,4 +1,3 @@
-using Common.Enums;
 using Common.Exceptions;
 using Common.Wrapper;
 using FluentValidation.Results;
@@ -11,6 +10,6 @@ public static class ValidatorResponseExt
     {
         return validationResult.IsValid
             ? null
-            : new ResponseWrapper<T>(ValidationErrors.General(validationResult.ToString("~")));
+            : ResponseWrapper<T>.Fail(ValidationErrors.General(validationResult.ToString("~")));
     }
 }

@@ -7,7 +7,7 @@ public class PagingResponseWrapper<T> : ResponseWrapper<T>
     public int PageCount { get; set; }
     public int TotalItem { get; set; }
 
-    public PagingResponseWrapper<T> Success(PageWrapper<T> data, string message = null)
+    private PagingResponseWrapper(PageWrapper<T> data, string message = null)
     {
         Page = data.Page;
         PerPage = data.PageSize;
@@ -16,6 +16,10 @@ public class PagingResponseWrapper<T> : ResponseWrapper<T>
         IsSuccessful = true;
         Message = message;
         Data = data.Items;
-        return this;
+    }
+
+    public static PagingResponseWrapper<T> Success(PageWrapper<T> data, string message = null)
+    {
+        return new PagingResponseWrapper<T>(data, message);
     }
 }

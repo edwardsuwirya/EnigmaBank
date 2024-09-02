@@ -16,7 +16,7 @@ public class ResponseWrapper<T>
     {
     }
 
-    public ResponseWrapper(T data, string message = "Success")
+    private ResponseWrapper(T data, string message = "Success")
     {
         IsSuccessful = true;
         Message = message;
@@ -24,10 +24,13 @@ public class ResponseWrapper<T>
         Data = data;
     }
 
-    public ResponseWrapper(InternalError internalError)
+    private ResponseWrapper(InternalError internalError)
     {
         IsSuccessful = false;
         InternalError = internalError;
         Data = default;
     }
+
+    public static ResponseWrapper<T> Success(T data, string message = "Success") => new(data, message);
+    public static ResponseWrapper<T> Fail(InternalError internalError) => new(internalError);
 }
