@@ -10,9 +10,25 @@ public enum ErrorReason : byte
     ExistenceEmptyList,
     BusinessInsufficientBalance,
     GeneralError,
+    InvalidKey,
+    InvalidToken,
+    InvalidCredentials,
 }
 
 public sealed record InternalError(ErrorReason Reason, int StatusCode, string? Message = null);
+
+public static class AuthenticationErrors
+{
+    public static InternalError InvalidToken(string description = "Unauthorized") => new InternalError(
+        ErrorReason.InvalidToken, 401, description);
+
+    public static InternalError InvalidKey(string description = "Unauthorized") => new InternalError(
+        ErrorReason.InvalidKey, 401, description);
+
+    public static InternalError InvalidCredential(string description = "Invalid User Name or Password") =>
+        new InternalError(
+            ErrorReason.InvalidCredentials, 401, description);
+}
 
 public static class ValidationErrors
 {

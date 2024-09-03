@@ -1,6 +1,7 @@
 using Common.Exceptions;
 using FluentValidation;
 using MediatR;
+using Serilog;
 
 namespace Application.Validations;
 
@@ -22,7 +23,10 @@ public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TReq
 
         if (errors.Count != 0)
         {
-            var appError = ValidationErrors.General(string.Join("-", errors));
+            var errMessage = string.Join("-", errors);
+
+            Log.Error(errMessage);
+            var appError = ValidationErrors.General(errMessage);
 
             return (TResponse)Activator.CreateInstance(typeof(TResponse),
                 appError);

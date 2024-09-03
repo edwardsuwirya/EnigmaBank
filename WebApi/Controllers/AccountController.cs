@@ -2,11 +2,13 @@ using Application.Features.Accounts.Commands;
 using Application.Features.Accounts.Queries;
 using Common.Requests;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using WebApi.Filters;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
-    public class AccountController : BaseApiController
+    public class AccountController() : BaseApiController
     {
         [HttpPost("add")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateAccount createAccount)
@@ -52,9 +54,13 @@ namespace WebApi.Controllers
             return Handle(response);
         }
 
+        // [TypeFilter(typeof(LogActionFilter), Arguments = ["sss"])]
+        // [ServiceFilter<LogActionFilter>]
+        [TypeFilter(typeof(RequiredKeyFilter))]
         [HttpGet("all")]
         public async Task<IActionResult> GetAccounts()
         {
+            // throw new Exception("Not implemented");
             var response = await Sender.Send(new GetAccountsQuery());
             return Handle(response);
         }

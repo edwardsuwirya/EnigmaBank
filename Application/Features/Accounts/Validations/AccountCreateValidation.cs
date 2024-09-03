@@ -1,9 +1,7 @@
 using Application.Features.Accounts.Commands;
-using Common.Exceptions;
-using Common.Requests;
 using FluentValidation;
 
-namespace Application.Validations;
+namespace Application.Features.Accounts.Validations;
 
 public class AccountCreateValidation : AbstractValidator<CreateAccountCommand>
 {

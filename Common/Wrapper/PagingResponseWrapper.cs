@@ -18,8 +18,5 @@ public class PagingResponseWrapper<T> : ResponseWrapper<T>
         Data = data.Items;
     }
 
-    public static PagingResponseWrapper<T> Success(PageWrapper<T> data, string message = null)
-    {
-        return new PagingResponseWrapper<T>(data, message);
-    }
+    public static PagingResponseWrapper<T> Success(PageWrapper<T> data, string message = null) => new(data, message);
 }

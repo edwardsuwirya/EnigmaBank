@@ -1,9 +1,12 @@
+using System.Configuration;
 using System.Text.Json.Serialization;
 using Application;
-using Common;
-using Common.Exceptions;
 using Infrastructure;
+using Microsoft.OpenApi.Models;
+using Serilog;
 using WebApi.Exceptions;
+using WebApi.Filters;
+using WebApi.Swagger;
 
 namespace WebApi;
 
@@ -13,16 +16,37 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-
-        builder.Services.AddControllers().AddJsonOptions(opt =>
+        builder.Host.UseSerilog((ctx, conf) =>
         {
-            opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            conf.ReadFrom.Configuration(ctx.Configuration);
         });
+
+        // Add services to the container.
+        
+        builder.Services.AddScoped<LogActionFilter>();
+        builder.Services.AddScoped<RequiredKeyFilter>();
+
+        builder.Services
+            .AddControllers(
+                // Global Filters
+                // cfg => cfg.Filters.Add(typeof(LogActionFilter))
+            )
+            .AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            });
+
+        // Global Filters
+        // builder.Services.AddMvc(options => { options.Filters.Add(typeof(LogActionFilter)); });
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(config =>
+        {
+            config.SwaggerDoc("v1", new OpenApiInfo() { Title = "Enigma Bank API", Version = "V1" });
+            config.OperationFilter<AddHeaderParamOpsFilter>();
+        });
 
         builder.Services.AddValidation();
         builder.Services.AddDatabase(builder.Configuration);
@@ -42,6 +66,7 @@ public class Program
             app.UseSwaggerUI();
         }
 
+        app.UseSerilogRequestLogging();
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
