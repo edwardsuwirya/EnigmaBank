@@ -9,6 +9,11 @@ namespace Infrastructure;
 
 public static class Startup
 {
+    public static IServiceCollection AddTokenUtils(this IServiceCollection services, IConfiguration configuration)
+    {
+        return services.AddSingleton(typeof(IJwtManagerRepository), new JwtManagerRepository(configuration));
+    }
+
     public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
         return services

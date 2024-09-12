@@ -1,13 +1,13 @@
 using Application.Features.Accounts.Commands;
 using Application.Features.Accounts.Queries;
 using Common.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
-using WebApi.Filters;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class AccountController() : BaseApiController
     {
         [HttpPost("add")]
@@ -56,7 +56,7 @@ namespace WebApi.Controllers
 
         // [TypeFilter(typeof(LogActionFilter), Arguments = ["sss"])]
         // [ServiceFilter<LogActionFilter>]
-        [TypeFilter(typeof(RequiredKeyFilter))]
+        // [TypeFilter(typeof(RequiredKeyFilter))]
         [HttpGet("all")]
         public async Task<IActionResult> GetAccounts()
         {

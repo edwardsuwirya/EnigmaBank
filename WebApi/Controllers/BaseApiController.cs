@@ -1,9 +1,6 @@
-using Common.Enums;
-using Common.Exceptions;
 using Common.Wrapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace WebApi.Controllers
 {
@@ -11,8 +8,12 @@ namespace WebApi.Controllers
     public class BaseApiController : ControllerBase
     {
         private ISender _sender;
+        private IConfiguration _configuration;
 
         protected ISender Sender => _sender ??= HttpContext.RequestServices.GetService<ISender>();
+
+        protected IConfiguration Configuration =>
+            _configuration ??= HttpContext.RequestServices.GetService<IConfiguration>();
 
         protected IActionResult Handle<T>(ResponseWrapper<T> response)
         {
